@@ -1,0 +1,341 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Firma</title>
+        <h:outputStylesheet library="css" name="firmaStyle.css"/>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3-scale.v3.min.js"></script>
+
+    </h:head>
+    <h:body>
+
+
+        <h1>
+            Dobro dosli #{firmaController.logovanaFirma.username}
+        </h1>
+        <h:form>
+            <p:commandButton id="menu" value="Opcije" type="button" />
+            <p:menu overlay="true" trigger="menu" my="left top" at="left bottom">
+                <p:menuitem value="Log out"  action="#{firmaController.logOut()}"></p:menuitem>
+                <p:menuitem value="Promeni sifru" action="#{firmaController.promeniSifru}"></p:menuitem>
+                <p:menuitem value="Online prodavnica"  action="#{firmaController.otvoriProdavnicu()}"></p:menuitem>
+            </p:menu>
+        </h:form>
+        <br/>
+
+        <p:tabView style="width:70%; margin: 0 auto; text-align: center">
+            <p:tab title="Narudzbine">
+                <h:form style="width:100%">
+                    <p:dataTable id="narudzbine" var="narudzbina" value="#{firmaController.narudzbine}"
+                                 selection="#{firmaController.selectedNarudzbina}" selectionMode="single" rowKey="#{narudzbina.id}" style="width:100%">
+                        <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}">
+                            <f:facet name="header">
+                                Proizvod
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.naziv}"></h:outputText>
+                        </p:column>
+                        <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.kolicina}">
+                            <f:facet name="header">
+                                Kolicina
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.kolicina}"></h:outputText>
+                        </p:column>
+                        <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.rasadnik.naziv}">
+                            <f:facet name="header">
+                                Rasadnik
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.rasadnik.naziv}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{narudzbina.datum}" styleClass="#{firmaController.nemaKurira ? 'crveno':''}">
+                            <f:facet name="header">
+                                Datum
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.datum}" style="width:30%">
+                            </h:outputText>
+                        </p:column>
+                        <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.poslato}">
+                            <f:facet name="header">
+                                Poslato
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.poslato}"></h:outputText>
+                        </p:column>
+                        <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.isporuceno}">
+                            <f:facet name="header">
+                                Isporuceno
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.isporuceno}"></h:outputText>
+                        </p:column>
+                        <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.odbijeno}">
+                            <f:facet name="header">
+                                Odbijeno
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.odbijeno}"></h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    <p:contextMenu for="narudzbine">
+                        <p:menuitem value="Odbaci"  icon="ui-icon-close" update="@form @([id$=narudzbineZaMesec])" action="#{firmaController.odbaciNarudzbinu()}"></p:menuitem> 
+                        <p:menuitem value="Prihvati" icon="ui-icon-ok" update="@form @([id$=narudzbineZaMesec])" action="#{firmaController.prihvatiNarudzbinu}"></p:menuitem>
+                        <p:menuitem value="Isporuci" icon="ui-icon-done" update="@form @([id$=narudzbineZaMesec])" action="#{firmaController.isporuciNarudzbinu()}"></p:menuitem>
+                    </p:contextMenu>
+                </h:form>
+            </p:tab>
+            <p:tab title="Proizvodi">
+                <h:form>
+                    <p:dataTable id="proizvodi" var="proizvod" value="#{firmaController.sviProizvodi}"
+                                 selection="#{firmaController.selectedProizvod}" selectionMode="single" rowKey="#{proizvod.id}">
+                        <p:column>
+                            <f:facet name="header">
+                                Naziv
+                            </f:facet>
+                            <h:outputText value="#{proizvod.naziv}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Kolicina
+                            </f:facet>
+                            <h:outputText value="#{proizvod.kolicina}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Tip
+                            </f:facet>
+                            <h:outputText value="#{proizvod.tip}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Dostupan
+                            </f:facet>
+                            <h:outputText value="#{proizvod.dostupan}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Broj dana
+                            </f:facet>
+                            <h:outputText value="#{proizvod.brojDana}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Ocena
+                            </f:facet>
+                            <h:outputText value="#{proizvod.prosecnaOcena}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Broj ocena
+                            </f:facet>
+                            <h:outputText value="#{proizvod.brojOcena}">
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    <p:contextMenu for="proizvodi">
+                        <p:menuitem value="Obrisi"  icon="ui-icon-close" update="@form" action="#{firmaController.obrisiProizvod()}"></p:menuitem> 
+                        <p:menuitem value="Povuci" icon="ui-icon-minus" update="@form" action="#{firmaController.promeniDostupnost()}"></p:menuitem>
+                        <p:menuitem value="Prikazi" icon="ui-icon-search" update="@form" action="#{firmaController.prikaziProizvod()}"></p:menuitem>
+                    </p:contextMenu>
+                </h:form>
+
+            </p:tab>
+            <p:tab title="Dodaj proizvod">
+                <h:form id="forma">
+                    <p:steps activeIndex="#{firmaController.korakID}">
+                        <p:menuitem id="id1" value="Naziv" style="width:65px">
+                            <p:ajax update="forma"></p:ajax>
+                        </p:menuitem>
+                        <p:menuitem id="id2" value="Tip" style="width:65px">
+
+                        </p:menuitem>
+                        <p:menuitem id="id3" value="Cena" style="width:65px">
+
+                        </p:menuitem>
+                        <p:menuitem id="id4" value="Broj dana" style="width:65px">
+
+                        </p:menuitem>
+
+                        <p:menuitem id="id5" value="Kolicina" style="width:65px">
+
+                        </p:menuitem>
+                    </p:steps>      
+
+                    <p:panel header="Naziv" rendered="#{firmaController.korakID eq 0}">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            Naziv proizvoda:
+                            <h:inputText id="naziv" required="true" value="#{firmaController.noviProizvod.naziv}" requiredMessage="Obavezno polje"></h:inputText>
+                            <p:messages for="naziv"></p:messages>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Napred" action="#{firmaController.sledeciKorak()}">
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:panel header="Tip" rendered="#{firmaController.korakID eq 1}">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            Tip:
+                            <p:selectOneMenu id="tip" required="true" value="#{firmaController.noviProizvod.tip}">
+                                <f:selectItem itemLabel="sadnica" itemValue="sadnica"></f:selectItem>
+                                <f:selectItem itemLabel="preparat" itemValue="preparat"></f:selectItem>
+                            </p:selectOneMenu>
+                            <p:messages for="tip"></p:messages>
+                            <p></p>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Nazad" action="#{firmaController.prethodniKorak()}">
+                            </p:commandButton>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Napred" action="#{firmaController.sledeciKorak()}">
+                            </p:commandButton>
+
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel header="Cena" rendered="#{firmaController.korakID eq 2}">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            Cena
+                            <p:inputNumber minValue="0" id="cena"  required="true" value="#{firmaController.noviProizvod.cena}" requiredMessage="Obavezno polje"></p:inputNumber>
+                            <p:messages for="cena"></p:messages>
+                            <p></p>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Nazad" action="#{firmaController.prethodniKorak()}">
+                            </p:commandButton>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Napred" action="#{firmaController.sledeciKorak()}">
+                            </p:commandButton>
+
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel header="Broj dana" rendered="#{firmaController.korakID eq 3}">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            Broj dana:
+                            <p:inputNumber minValue="0" id="brDana" decimalPlaces="0" required="true" value="#{firmaController.noviProizvod.brojDana}" requiredMessage="Obavezno polje"></p:inputNumber>
+                            <p:messages for="brDana"></p:messages>
+                            <p></p>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Nazad" action="#{firmaController.prethodniKorak()}">
+                            </p:commandButton>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Napred" action="#{firmaController.sledeciKorak()}">
+                            </p:commandButton>
+
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel header="Kolicina" rendered="#{firmaController.korakID eq 4}">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            Kolicina:
+                            <h:inputText id="kolicina" required="true" value="#{firmaController.noviProizvod.kolicina}" requiredMessage="Obavezno polje"></h:inputText>
+                            <p:messages for="tip"></p:messages>
+                            <p></p>
+                            <p:commandButton type="submit" process="@form" update="forma" value="Nazad" action="#{firmaController.prethodniKorak()}">
+                            </p:commandButton>
+                            <p:commandButton type="submit" value="Dodaj" action="#{firmaController.dodajProizvod()}" >
+                                <f:ajax execute="@form"></f:ajax>
+                            </p:commandButton>
+
+                        </p:panelGrid>
+                    </p:panel>
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Prikaz rada"> 
+                <svg id="container" class="container">
+                </svg>
+                <script type="text/javascript">
+                    var isporuceno = "#{firmaController.isporuceno}";
+                    var odbijeno = "#{firmaController.odbijeno}";
+                    var poslato = "#{firmaController.poslato}";
+                    var max = "#{firmaController.max}";
+                    var data = [
+                        {value: isporuceno, naziv: "isporuceno"},
+                        {value: odbijeno, naziv: "odbijeno"},
+                        {value: poslato, naziv: "poslato"}
+                    ];
+                    var padding = {top: 20, right: 30, bottom: 30, left: 50};
+                    var chartArea = {
+                        "width": 800 - padding.left - padding.right,
+                        "height": 300 - padding.top - padding.bottom
+                    };
+
+                    console.log(max);
+
+
+                    const xScale = d3.scaleBand().domain(data.map((dataPoint) => dataPoint.naziv)).rangeRound([0, 800]).padding(0.20);
+                    const yScale = d3.scaleLinear().domain([0, max]).range([chartArea.height, 0]);
+
+                    const container = d3.select('#container');
+                    const bars = container.selectAll('.bar')
+                            .data(data)
+                            .enter()
+                            .append('rect')
+                            .classed('bar', true)
+                            .attr('width', xScale.bandwidth())
+                            .attr('height', (data) => chartArea.height - yScale(data.value))
+                            .attr('x', data => xScale(data.naziv) + padding.left)
+                            .attr('y', data => yScale(data.value) + padding.top)
+
+                    var x_axis = d3.axisBottom().scale(xScale);
+                    var y_axis = d3.axisLeft().scale(yScale);
+
+
+
+                    container.append("g")
+                            .attr("transform", "translate( " + padding.left + ',' + (chartArea.height + padding.top) + ")")
+                            .call(x_axis)
+
+                    container.append("g")
+                            .attr("transform", "translate(" + padding.left + ',' + padding.top + ')')
+                            .call(y_axis);
+
+                </script>
+                <br/>
+                <br/>
+                <p:dataTable id="narudzbineZaMesec" value="#{firmaController.narudzbineZaMesec}" var="narudzbina">
+                    <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}">
+                        <f:facet name="header">
+                            Proizvod
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.proizvod.naziv}"></h:outputText>
+                    </p:column>
+                    <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.kolicina}">
+                        <f:facet name="header">
+                            Kolicina
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.kolicina}"></h:outputText>
+                    </p:column>
+                    <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.rasadnik.naziv}">
+                        <f:facet name="header">
+                            Rasadnik
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.rasadnik.naziv}"></h:outputText>
+                    </p:column>
+                    <p:column sortBy="#{narudzbina.datum}" styleClass="#{firmaController.nemaKurira ? 'crveno':''}">
+                        <f:facet name="header">
+                            Datum
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.datum}" style="width:30%">
+                        </h:outputText>
+                    </p:column>
+                    <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.poslato}">
+                        <f:facet name="header">
+                            Poslato
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.poslato}"></h:outputText>
+                    </p:column>
+                    <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.isporuceno}">
+                        <f:facet name="header">
+                            Isporuceno
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.isporuceno}"></h:outputText>
+                    </p:column>
+                    <p:column styleClass="#{firmaController.nemaKurira ? 'crveno':''}" sortBy="#{narudzbina.odbijeno}">
+                        <f:facet name="header">
+                            Odbijeno
+                        </f:facet>
+                        <h:outputText value="#{narudzbina.odbijeno}"></h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+        </p:tabView>
+        <br/>
+        <br/>
+    </h:body>
+</html>
+

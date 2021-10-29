@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <h:outputStylesheet library="css" name="regFirmaStyle.css"/>
+         <script src="http://www.google.com/recaptcha/api.js"></script>
+    </h:head>
+    <h:body>
+        <h1 style="text-align: center">Registruj se</h1>
+        <h:form styleClass="forma">
+            <p:panel header="Registracija">
+                <h:panelGrid columns="1">
+                    <p>
+                        #{registracijaFController.msg}
+                    </p>
+                    Naziv preduzeća:
+                    <p:inputText id="ime" value="#{registracijaFController.ime}" styleClass="inputPolja"
+                                 required="true" requiredMessage="Polje Ime je obavezno!" placeholder="Unesi naziv"
+                                 />
+                    <p:message for="ime" styleClass="poruka" />
+                    Korisnicko ime:
+                    <p:inputText id="username" value="#{registracijaFController.username}" styleClass="inputPolja"
+                                 required="true" requiredMessage="Polje korisnicko ime je obavezno!" placeholder="Unesi username"
+                                 />
+                    <p:message for="username" styleClass="poruka" />
+                    Lozinka:
+                    <p:password id="password" value="#{registracijaFController.password}" styleClass="inputPolja"
+                                required="true" requiredMessage="Polje lozinka ime je obavezno!" 
+                                validatorMessage="Lozinka nije u odgovarajucem formatu!" placeholder="Unesi lozinku"
+                                title="Lozinka treba da ima minimalno 7 karaktera, bar jedno veliko slovo,broj i specijalni karakter, i da pocinje velikim slovom!"
+                                >
+                        <f:validateRegex pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!-/])[A-Za-z][A-Za-z\d!-/]{6,}"></f:validateRegex>
+                    </p:password>
+                    <p:message for="password" styleClass="poruka" 
+                               />
+                    Datum osnivanja:
+                    <p:calendar id="date" value="#{registracijaFController.datumRodjenja}" inputStyle="text-align: center" 
+                                required="true" requiredMessage="Polje za datum je obavezno" placeholder="Unesi datum rodjenja"
+                                />
+                    <p:message for="date" styleClass="poruka" 
+                               />
+                    Mesto:
+                    <p:inputText id="mesto" value="#{registracijaFController.mesto}" styleClass="inputPolja"
+                                 required="true" requiredMessage="Polje mesto je obavezno" placeholder="Unesi mesto"/>
+                    <p:message for="mesto" styleClass="poruka"
+                               />
+
+                    E-mail:
+                    <p:inputText id="mail" value="#{registracijaFController.email}" styleClass="inputPolja"
+                                 required="true" requiredMessage="Polje e-mail je obavezno!" placeholder="Unesi email"
+                                 validatorMessage="Unesite ispravan email!"
+                                 >
+                        <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}"/>
+                    </p:inputText>
+                    <p:message for="mail" styleClass="poruka" 
+                               />
+                    <p:captcha id="captcha" ></p:captcha>
+                    <p:messages for="captcha"></p:messages>
+                    <h:commandButton value="Potvrdi" action="#{registracijaFController.registruj()}" styleClass="dugme"></h:commandButton>
+                    <p style="    font-family: Courier New;font-size: smaller">*Sva polja su obavezna!*</p>
+
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Rasadnik</title>
+        <h:outputStylesheet library="css" name="rasadnikStyle.css"/>
+        <style>
+            .ui-dashboard{
+                width:70%;
+                text-align: center;
+                margin:0 auto;
+            }
+            .ui-dashboard-column{
+                float: none;
+            }
+        </style>
+    </h:head>
+    <h:body>
+
+        <H1>
+            Rasadnik: #{rasadnikController.rasadnik.naziv}
+        </H1>
+        <br/>
+        <h:form>
+            <p:commandButton id="menu" value="Opcije" type="button" />
+            <p:menu overlay="true" trigger="menu" my="left top" at="left bottom">
+                <p:menuitem value="Log out"  action="#{poljoprivrednikController.logOut()}"></p:menuitem>
+                <p:menuitem value="Online prodavnica"  action="#{rasadnikController.otvoriProdavnicu()}"></p:menuitem>
+                <p:menuitem value="Nazad"  action="#{rasadnikController.nazadNaPoljoprivrednika()}"></p:menuitem>
+            </p:menu>
+        </h:form>
+        <br/>
+
+        <p:tabView style="width:50%; margin: 0 auto; text-align: center">
+
+            <p:tab title="Meni">
+                <div style="margin:0 auto; text-align: center">
+                    <h:form style="margin:0 auto; text-align: center; width: 100%; overflow: auto">
+                        <p:dashboard id="board" model="#{rasadnikController.model}" disabled="true">
+                            <p:panel id="KolicinaVode"  header="Kolicina Vode">
+                                <h:outputText value="#{rasadnikController.rasadnik.vrVode}" style="align-content: center"></h:outputText>
+                                <br/>
+                                <p:commandButton value="Povecaj" update="@form"  action="#{rasadnikController.povecajVodu()}"></p:commandButton>
+                                <p:commandButton value="Smanji" update="@form"  action="#{rasadnikController.smanjiVodu()}"></p:commandButton>
+                            </p:panel>
+                            <p:panel id="Temperatura" header="Temperatura">
+                                <h:outputText value="#{rasadnikController.rasadnik.temperatura}" style="align-content: center"></h:outputText>
+                                <br/>
+                                <p:commandButton value="Povecaj" update="@form"  action="#{rasadnikController.povecajTemperaturu()}"></p:commandButton>
+                                <p:commandButton value="Smanji" update="@form"  action="#{rasadnikController.smanjiTemperaturu()}"></p:commandButton>
+                            </p:panel>
+                            <p:panel id="Sadnice" header="Sadnice" >
+                                <p:commandButton value='Prikazi' action='#{rasadnikController.prikaziSadnice()}'></p:commandButton>
+                            </p:panel>
+
+                        </p:dashboard>
+                        <div style="clear:both" />
+                    </h:form>
+                </div>
+            </p:tab>  
+            <p:tab title="Magacin">
+                <h:form style="width:100%">
+                    <p:dataTable value="#{rasadnikController.narudzbine}" var="narudzbina" sortMode="multiple">
+                        <p:column sortBy="#{narudzbina.proizvod.naziv}" filterBy="#{narudzbina.proizvod.naziv}">
+                            <f:facet name="header">
+                                Naziv
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.naziv}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{narudzbina.proizvod.proizvodjac.ime}" filterBy="#{narudzbina.proizvod.proizvodjac.ime}">
+                            <f:facet name="header">
+                                Proizvodjac
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.proizvodjac.ime}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{narudzbina.proizvod.tip}" filterBy="#{narudzbina.proizvod.tip}">
+                            <f:facet name="header">
+                                Tip
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.tip}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{narudzbina.datum}" filterBy="#{narudzbina.datum}" style="width: 30%">
+                            <f:facet name="header">
+                                Datum narudzbine:
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.datum}">
+
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Kolicina:
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.kolicina}"></h:outputText>
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                            </f:facet>
+                            <p:commandButton rendered="#{!narudzbina.poslato}" type="submit" update="@form" action="#{rasadnikController.otkaziNarudzbinu(narudzbina)}" value='Otkazi'></p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:tab>
+        </p:tabView>
+        <br/>
+        <br/>
+    </h:body>
+</html>
+

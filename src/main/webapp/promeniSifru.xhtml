@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Promena sifre</title>
+    </h:head>
+    <h:body style="text-align: center; margin: 0 auto; background: lightblue">
+        <br/>
+        <br/>
+        <h:form style="text-align: center; margin: 0 auto;">
+
+
+            <p:panelGrid columns="1" style="margin:0 auto">
+                Stara sifra:
+                <h:inputSecret value="#{promeniSifruController.staraSifra}"></h:inputSecret>
+                Nova sifra:
+                <p:password id="password1" value="#{promeniSifruController.novaSifra}" 
+                            required="true" requiredMessage="Polje je obavezno!" 
+                            validatorMessage="Lozinka nije u odgovarajucem formatu!" placeholder="Unesi lozinku"
+                            title="Lozinka treba da ima minimalno 7 karaktera, bar jedno veliko slovo,broj i specijalni karakter, i da pocinje velikim slovom!"
+                            >
+                    <f:validateRegex pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!-/])[A-Za-z][A-Za-z\d!-/]{6,}"></f:validateRegex>
+                </p:password>
+                <p:messages for="password1"></p:messages>
+                Ponovo unesite novu sifru:
+                <p:password id="password2" value="#{promeniSifruController.novaSifraPonovljeno}" 
+                            required="true" requiredMessage="Polje je obavezno!" 
+                            validatorMessage="Lozinka nije u odgovarajucem formatu!" placeholder="Unesi lozinku"
+                            title="Lozinka treba da ima minimalno 7 karaktera, bar jedno veliko slovo,broj i specijalni karakter, i da pocinje velikim slovom!"
+                            >
+                    <f:validateRegex pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!-/])[A-Za-z][A-Za-z\d!-/]{6,}"></f:validateRegex>
+                </p:password>
+                <p:messages for="password2"></p:messages>
+                <h:commandButton value="promeni"  action="#{promeniSifruController.promeni()}"></h:commandButton>
+
+            </p:panelGrid>
+            <h:outputText value="#{promeniSifruController.msg}" style="color:red"></h:outputText>
+
+        </h:form>
+        <h:form style="text-align: center; margin: 0 auto;">
+            <h:commandButton value="nazad" action="#{promeniSifruController.nazad()}" style="width:10%;"></h:commandButton>
+        </h:form>
+    </h:body>
+</html>
+

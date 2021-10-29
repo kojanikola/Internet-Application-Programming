@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Poljoprivrednik</title>
+        <h:outputStylesheet library="css" name="poljoprivrednikStyle.css"></h:outputStylesheet>
+        <style>
+            .ui-growl { 
+                position: fixed;
+                right: 20px;
+                width: 300px;
+                bottom:0px;
+                top:600px;
+            }
+
+        </style>
+    </h:head>
+    <h:body>
+        <H1>
+            Dobro dosli #{poljoprivrednikController.logovaniPoljoprivrednik.ime}
+        </H1>
+        <h:form>
+            <p:commandButton id="menu" value="Opcije" type="button" />
+            <p:menu overlay="true" trigger="menu" my="left top" at="left bottom">
+                <p:menuitem value="Log out"  action="#{poljoprivrednikController.logOut()}"></p:menuitem>
+                <p:menuitem value="Promeni sifru"  action="#{poljoprivrednikController.promeniSifru()}"></p:menuitem>
+            </p:menu>
+        </h:form>
+        <br/>
+        <p:growl sticky="true" showDetail="true" id="growl"  >
+        </p:growl>
+        <p:tabView style="width: 70%; margin: 0 auto; text-align: center" > 
+            <p:tab title="Rasadnici">
+                <h:form style="width:80%" id="tabela">
+                    <p:dataTable id="rasadnici" value="#{poljoprivrednikController.rasadnici}" var="rasadnik">
+                        <p:column>  
+                            <f:facet name="header">
+                                Naziv
+                            </f:facet>
+
+                            #{rasadnik.naziv}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Mesto
+                            </f:facet>
+
+                            #{rasadnik.mesto}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Broj sadnica
+                            </f:facet>
+
+                            #{rasadnik.brSadnica}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Broj slobodnih mesta
+                            </f:facet>
+
+                            #{rasadnik.brSlobMesta}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Kolicina vode
+                            </f:facet>
+
+                            #{rasadnik.vrVode}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Temperatura
+                            </f:facet>
+
+                            #{rasadnik.temperatura}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Prikazi
+                            </f:facet>
+
+                            <h:commandButton value="prikazi" action="#{poljoprivrednikController.otvoriRasadnik(rasadnik)}">
+                            </h:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:tab>
+            <p:tab title="Dodaj rasadnik">
+                <h:form id="dodajRasadnik">
+                    <p:panelGrid columns="1" styleClass="ui-noborder" style="font-size: larger">
+                        Naziv rasadnika:
+                        <p:inputText id="naziv" required="true" value="#{poljoprivrednikController.dodajRasadnik.naziv}"
+                                     requiredMessage="Polje naziv je obavezno!" placeholder="Unesi naziv" styleClass="inputPolja">
+                        </p:inputText>
+                        <p:messages for="naziv" style="font-size: smaller;"></p:messages>
+                        <hr/>
+                        Mesto:
+                        <p:inputText id="mesto" required="true" value="#{poljoprivrednikController.dodajRasadnik.mesto}"
+                                     requiredMessage="Polje mesto je obavezno!" placeholder="Unesi mesto" styleClass="inputPolja">
+                        </p:inputText>
+                        <p:messages for="mesto" style="font-size: smaller;"></p:messages>
+                        <hr/>
+                        Sirina:
+                        <p:inputNumber minValue="0" id="sirina" value="#{poljoprivrednikController.dodajRasadnik.sirina}" inputStyle="text-align: center" 
+                                       requiredMessage="Polje sirina je obavezno!" placeholder="Unesi sirinu" decimalPlaces="0" >
+                        </p:inputNumber>
+                        <p:messages for="sirina" style="font-size: smaller;"></p:messages>
+                        <hr/>
+                        Duzina:
+                        <p:inputNumber minValue="0" id="duzina" value="#{poljoprivrednikController.dodajRasadnik.duzina}" inputStyle="text-align: center" 
+                                       requiredMessage="Polje duzina je obavezno!" placeholder="Unesi duzinu" decimalPlaces="0" >
+                        </p:inputNumber>
+                        <p:messages for="duzina" style="font-size: smaller;"></p:messages>
+                    </p:panelGrid>
+                    <h:commandButton action="#{poljoprivrednikController.dodajRasadnikF()}" value="Dodaj" styleClass="dugme">
+                        <f:ajax execute="@form" render="dodajRasadnik"></f:ajax>
+                    </h:commandButton>
+                </h:form>
+            </p:tab>
+
+        </p:tabView>
+        <br/>
+        <br/>
+    </h:body>
+</html>
+

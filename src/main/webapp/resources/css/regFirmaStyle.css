@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 28, 2020, 11:55:31 PM
+    Author     : Koja
+*/
+
+body{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: lightblue;
+}
+table{
+    font-size: large;
+    width: 100%;
+    vertical-align: central;
+}
+
+
+.inputPolja{
+    width: 60%;
+    padding: 5px 5px;
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+
+}
+
+.dugme{
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    margin: 8px 0;
+    cursor: pointer;
+    width: 30%;
+    font-size:larger;
+}
+
+.forma{
+    margin: 0 auto;
+    width:70%;
+    text-align: center;
+
+}
+
+.poruka{
+    color: red;
+    font-family: Courier New;
+    font-size: smaller;
+}

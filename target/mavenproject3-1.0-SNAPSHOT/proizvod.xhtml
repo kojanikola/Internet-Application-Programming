@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="proizvodStyle.css"/> 
+    </h:head>
+    <h:body>
+        <br/>
+        <br/>
+        <h:form id="informacije">
+            <h2>
+                Proizvod:
+                <h:outputText value="#{proizvodController.proizvod.naziv}"></h:outputText>
+                <br/>
+                Ocena:
+                <h:outputText value="#{proizvodController.proizvod.prosecnaOcena}"></h:outputText>
+            </h2>
+
+        </h:form>
+        <p:commandButton action="#{proizvodController.nazad()}" value='Nazad'>
+
+        </p:commandButton>
+        <br/>
+        <br/>
+        <p:panel style="width:75%; text-align: center; margin: 0 auto">
+
+
+            <h:form id="komentari">
+                <p:dataTable value="#{proizvodController.komentari}" var="komentar">
+                    <p:column>
+                        <f:facet name="header">
+                            Tekst komentara:
+                        </f:facet>
+                        <h:outputText value="#{komentar.komentar}" style="text-align: center"></h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Ocena:
+                        </f:facet>
+                        <h:outputText value="#{komentar.ocena}" style="text-align: center"></h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <br/>
+            <h:form rendered='#{proizvodController.komentar}' >
+                <p:panelGrid columns="1">
+                    <span style="font-weight: bold">
+                        Komentar:
+                    </span>
+                    <p:inputTextarea value="#{proizvodController.tekstKomentara}" required="true" style="width:80%"></p:inputTextarea>
+                    <span style="font-weight: bold">
+                        Ocena:
+                    </span>
+                    <p:inputNumber inputStyle="text-align:center" minValue="1" maxValue="10" value="#{proizvodController.ocena}" required="true"></p:inputNumber> 
+                    <p:commandButton type="submit" update="@([id$=komentari]) @([id$=informacije])" action="#{proizvodController.ostaviKomentar()}"  value="Dodaj komentar"></p:commandButton>
+                    <p>Polja su obavezna</p>
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+        <br/>
+        <br/>
+    </h:body>
+</html>
+

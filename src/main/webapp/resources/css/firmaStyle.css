@@ -1,0 +1,39 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 19, 2020, 3:16:56 PM
+    Author     : Koja
+*/
+
+body{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: lightblue;
+}
+form{
+    margin: 0 auto;
+    width:70%;
+    text-align: center;
+}
+table{
+    font-size: large;
+    width: 100%;
+    vertical-align: central;
+    text-align: center;
+}
+.crveno{
+    background: red;
+}
+
+.bar{
+    fill: red;
+}
+.container{
+    width:850px;
+    height: 300px;
+    border:1px solid #720570;
+}

@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="prodavnicaStyle.css"/>
+    </h:head>
+    <h:body>
+        <h1> Dobro dosli u prodavnicu</h1>
+
+        <br/>
+        <br/>
+        <p:commandButton action="#{prodavnicaController.nazad()}" value='Nazad'></p:commandButton>
+        <br/>
+        <br/>
+        <p:tabView style="width:70%; margin: 0 auto">
+            <p:tab title="Proizvodi">
+                <h:form id="tabelaProizvoda" style="width:100%">
+                    <p:dataTable var="proizvod" value="#{prodavnicaController.proizvodi}">
+                        <p:column sortBy="#{proizvod.naziv}" filterBy="#{proizvod.naziv}">
+                            <f:facet name="header">
+                                Naziv
+                            </f:facet>
+                            <h:outputText value="#{proizvod.naziv}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{proizvod.tip}" filterBy="#{proizvod.tip}">
+                            <f:facet name="header">
+                                Tip
+                            </f:facet>
+                            <h:outputText value="#{proizvod.tip}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{proizvod.kolicina}" filterBy="#{proizvod.kolicina}">
+                            <f:facet name="header">
+                                Kolicina
+                            </f:facet>
+                            <h:outputText value="#{proizvod.kolicina}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{proizvod.prosecnaOcena}" filterBy="#{proizvod.prosecnaOcena}">
+                            <f:facet name="header">
+                                Ocena
+                            </f:facet>
+                            <h:outputText value="#{proizvod.prosecnaOcena}"></h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{proizvod.proizvodjac.ime}" filterBy="#{proizvod.proizvodjac.ime}">
+                            <f:facet name="header">
+                                Proizvodjac
+                            </f:facet>
+                            <h:outputText value="#{proizvod.proizvodjac.ime}"></h:outputText>
+                        </p:column>
+                        <p:column rendered="#{prodavnicaController.tipKorisnika eq 'poljoprivrednik'}">
+                            <f:facet name="header">
+                                Naruci:
+                            </f:facet>
+                            <p:commandButton update="@([id$=korpa]) @form" value="Naruci" action="#{prodavnicaController.dodajProizvod(proizvod)}">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column rendered="#{prodavnicaController.tipKorisnika eq 'poljoprivrednik'}">
+                            <f:facet name="header">
+                                Ostavi komentar:
+                            </f:facet>
+                            <p:commandButton value="Ostavi komentar" action="#{prodavnicaController.ostaviKomentar(proizvod)}">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:tab>
+            <p:tab title="Korpa" rendered="#{prodavnicaController.tipKorisnika eq 'poljoprivrednik'}">
+                <h:form id="korpa">
+                    <p:dataTable var="narudzbina" value="#{prodavnicaController.korpa}">
+                        <p:column>
+                            <f:facet name="header">
+                                Naziv
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.naziv}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Tip
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.tip}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Ocena
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.prosecnaOcena}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Proizvodjac
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.proizvod.proizvodjac.ime}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Kolicina
+                            </f:facet>
+                            <h:outputText value="#{narudzbina.kolicina}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Otkazi
+                            </f:facet>
+                            <p:commandButton update="@form @([id$=tabelaProizvoda])" value="Otkazi" action="#{prodavnicaController.otkazi(narudzbina)}">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Otkazi korpu" action="#{prodavnicaController.otkaziKorpu()}">
+                    </p:commandButton>
+
+                </h:form>
+            </p:tab>
+
+
+        </p:tabView>
+        <br/>
+        <br/>
+    </h:body>
+</html>
+

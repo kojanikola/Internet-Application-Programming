@@ -1,0 +1,453 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+
+        <h:outputStylesheet library="css" name="adminStyle.css"/>
+    </h:head>
+    <h:body>
+        <h1>
+            Dobro dosli #{adminController.logovaniAdmin.username}
+        </h1>
+        <h:form>
+            <p:commandButton id="menu" value="Opcije" type="button" />
+            <p:menu overlay="true" trigger="menu" my="left top" at="left bottom">
+                <p:menuitem value="Log out"  action="#{adminController.logOut()}"></p:menuitem>
+                <p:menuitem value="Online prodavnica"  action="#{firmaController.otvoriProdavnicu()}"></p:menuitem>
+            </p:menu>
+        </h:form>
+        <br/>
+
+        <p:tabView style="width:70%; margin: 0 auto; text-align: center">
+            <p:tab title="Zahtevi" class="tab">
+                <h:form style="width:100%">
+                    <p:dataTable id="firme" var="firma" value="#{adminController.zahteviFirmi}"
+                                 selection="#{adminController.selectedFirma}" selectionMode="single" rowKey="#{firma.username}">
+                        <f:facet name="header">
+                            Zahtevi firmi(Desni klik za brisanje)
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                Username
+                            </f:facet>
+                            #{firma.username}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Ime
+                            </f:facet>
+                            #{firma.ime}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Datum Osnivanja
+                            </f:facet>
+                            #{firma.datumOsnivanja}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Mesto
+                            </f:facet>
+                            #{firma.mesto}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                E-mail
+                            </f:facet>
+                            #{firma.email}
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:contextMenu for="firme">
+                        <p:menuitem value="Obrisi" icon="ui-icon-close" update="@form" action="#{adminController.izbaciFirmu}"></p:menuitem> 
+                        <p:menuitem value="Prihvati" icon="ui-icon-plus" update="@form" action="#{adminController.prihvatiFirmu}"></p:menuitem>
+                    </p:contextMenu>
+                    <br/>
+                    <br/>
+
+                    <p:dataTable id="poljoprivrednici" var="poljoprivrednik" value="#{adminController.zahteviPoljoprivrednika}"
+                                 selection="#{adminController.selectedPoljoprivrednik}" selectionMode="single"
+                                 rowKey="#{poljoprivrednik.username}">
+                        <f:facet name="header">
+                            Zahtevi poljoprivrednika (Desni klik za opcije)
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                Username
+                            </f:facet>
+                            #{poljoprivrednik.username}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Ime
+                            </f:facet>
+                            #{poljoprivrednik.ime}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Prezime
+                            </f:facet>
+                            #{poljoprivrednik.prezime}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Datum Rodjenja
+                            </f:facet>
+                            #{poljoprivrednik.datumRodjenja}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Mesto Rodjenja
+                            </f:facet>
+                            #{poljoprivrednik.mestoRodjenja}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                E-mail
+                            </f:facet>
+                            #{poljoprivrednik.email}
+                        </p:column>
+                    </p:dataTable>
+                    <p:contextMenu for="poljoprivrednici">
+                        <p:menuitem value="Obrisi" icon="ui-icon-close" update="@form" action="#{adminController.izbaciPoljoprivrednika()}"></p:menuitem> 
+                        <p:menuitem value="Prihvati" icon="ui-icon-plus" update="@form" action="#{adminController.prihvatiPoljoprivrednika}"></p:menuitem>
+                    </p:contextMenu>
+                    <br/>
+                    <br/>
+                </h:form>  
+            </p:tab>
+
+            <p:tab title="Dodaj firmu">
+                <h:form id="dodajFirmu">
+                    <p style="color:red;">
+                        #{adminController.msgFirma}
+                    </p>
+                    <h:panelGrid columns="1">
+                        Naziv preduzeca:
+                        <p:inputText id="ime" value="#{adminController.dodajFirma.ime}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje Ime je obavezno!" placeholder="Unesi ime" >
+                        </p:inputText>
+                        <p:message for="ime"></p:message>
+                        <hr/>
+                        Korisnicko ime:
+                        <p:inputText id="username" value="#{adminController.dodajFirma.username}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje Korisnicko ime je obavezno!" placeholder="Unesi username">
+                        </p:inputText>
+                        <p:message for="username"></p:message>
+                        <hr/>
+                        Lozinka:
+                        <p:password id="password" value="#{adminController.dodajFirma.password}" styleClass="inputPolja" style="background: lightgray"
+                                    required="true" requiredMessage="Polje lozinka je obavezno!" placeholder="Unesi lozinku"
+                                    validatorMessage="Lozinka nije u odgovarajucem formatu!"
+                                    title="Lozinka treba da ima minimalno 7 karaktera, bar jedno veliko slovo,broj i specijalni karakter, i da pocinje velikim slovom!">
+                            <f:validateRegex pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!-/])[A-Za-z][A-Za-z\d!-/]{6,}"></f:validateRegex>
+                        </p:password>
+                        <p:messages for="password" styleClass="poruka"></p:messages>
+                        <hr/>
+                        Datum osnivanja:
+                        <p:calendar id="date" value="#{adminController.dodajFirma.datumOsnivanja}"  inputStyleClass="inputPolja" inputStyle="background: lightgray"
+                                    required="true" requiredMessage="Polje za datum je obavezno" placeholder="Unesi datum rodjenja"
+                                    />
+                        <p:message for="date" styleClass="poruka" 
+                                   />
+                        <hr/>
+                        Mesto:
+                        <p:inputText id="mesto" value="#{adminController.dodajFirma.mesto}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje mesto je obavezno" placeholder="Unesi mesto"/>
+                        <p:message for="mesto" styleClass="poruka"
+                                   />
+                        <hr/>
+                        E-mail:
+                        <p:inputText id="mail" value="#{adminController.dodajFirma.email}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje e-mail je obavezno!" placeholder="Unesi email"
+                                     validatorMessage="Unesite ispravan email!"
+                                     >
+                            <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}"/>
+                        </p:inputText>
+                        <p:message for="mail" styleClass="poruka" 
+                                   />
+                        <hr/>
+                        <p:commandButton type="submit" process="@form" update="dodajFirmu @([id$=izmeniFirme])" value="Dodaj" action="#{adminController.dodajFirmu()}">
+                        </p:commandButton>
+
+                    </h:panelGrid>
+                </h:form>
+            </p:tab>
+            <p:tab title="Dodaj poljoprivrednika">
+                <h:form id="dodajPoljoprivrednika">
+                    <p style="color:red;">
+                        #{adminController.msgPolj}
+                    </p>
+                    <p:panelGrid columns="1" styleClass="ui-noborder">
+                        Ime:
+                        <p:inputText id="ime" value="#{adminController.dodajPolj.ime}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje Ime je obavezno!" placeholder="Unesi ime"
+                                     />
+                        <p:message for="ime" styleClass="poruka" />
+                        <hr/>
+                        Prezime:
+                        <p:inputText id="prezime" value="#{adminController.dodajPolj.prezime}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje Prezime je obavezno!" placeholder="Unesi prezime"
+                                     />
+                        <p:message for="prezime" styleClass="poruka" />
+                        <hr/>
+                        Korisnicko ime:
+                        <p:inputText id="username" value="#{adminController.dodajPolj.username}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje korisnicko ime je obavezno!" placeholder="Unesi username"
+                                     />
+                        <p:message for="username" styleClass="poruka" />
+                        <hr/>
+                        Lozinka:
+                        <p:password id="password" value="#{adminController.dodajPolj.password}" styleClass="inputPolja" style="background: lightgray"
+                                    required="true" requiredMessage="Polje lozinka ime je obavezno!" 
+                                    validatorMessage="Lozinka nije u odgovarajucem formatu!" placeholder="Unesi lozinku"
+                                    title="Lozinka treba da ima minimalno 7"
+                                    >
+                            <f:validateRegex pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!-/])[A-Za-z][A-Za-z\d!-/]{6,}"></f:validateRegex>
+                        </p:password>
+                        <p:message for="password" styleClass="poruka" 
+                                   />
+                        <hr/>
+                        Datum rodjenja:
+                        <p:calendar id="date" value="#{adminController.dodajPolj.datumRodjenja}" inputStyleClass="inputPolja" inputStyle="background: lightgray"
+                                    required="true" requiredMessage="Polje za datum je obavezno" placeholder="Unesi datum rodjenja"
+                                    />
+                        <p:message for="date" styleClass="poruka" 
+                                   />
+                        <hr/>
+                        Broj telefona:
+                        <p:inputText id="brTel" value="#{adminController.dodajPolj.telefon}" class="inputPolja" 
+                                     required="true" requiredMessage="Polje broj telefona je obavezno!" placeholder="Unesi broj telefona"
+                                     type="number"
+                                     />
+                        <p:message for="brTel" styleClass="poruka" 
+                                   />
+                        <hr/>
+                        Mesto:
+                        <p:inputText id="mesto" value="#{adminController.dodajPolj.mestoRodjenja}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje mesto je obavezno" placeholder="Unesi mesto"/>
+                        <p:message for="mesto" styleClass="poruka"
+                                   />
+                        <hr/>
+                        E-mail:
+                        <p:inputText id="mail" value="#{adminController.dodajPolj.email}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje e-mail je obavezno!" placeholder="Unesi email"
+                                     validatorMessage="Unesite ispravan email!"
+                                     >
+                            <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}"/>
+                        </p:inputText>
+                        <hr/>
+                        <p:message for="mail" styleClass="poruka" 
+                                   />
+                        <p:commandButton type="submit" process="@form" update="dodajPoljoprivrednika @([id$=izmeniPoljoprivrednike])" value="Dodaj" action="#{adminController.dodajPoljoprivrednika()}">
+                        </p:commandButton>
+
+                    </p:panelGrid>
+
+                </h:form>
+
+            </p:tab>
+            <p:tab title="Dodaj administratora">
+                <h:form id="dodajAdmina">
+                    <p style="color:red;">
+                        #{adminController.msgAdmin}
+                    </p>
+                    <p:panelGrid columns="1" styleClass="ui-noborder">
+                        Korisnicko ime:
+                        <p:inputText id="username" value="#{adminController.dodajAdmin.username}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje korisnicko ime je obavezno!" placeholder="Unesi username"
+                                     />
+                        <p:message for="username" styleClass="poruka" />
+                        <hr/>
+                        Lozinka:
+                        <p:password id="lozinka" value="#{adminController.dodajAdmin.password}" styleClass="inputPolja" style="background: lightgray"
+                                    required="true" requiredMessage="Polje lozinka je obavezno!" placeholder="Unesi username"
+                                    />
+                        <p:message for="lozinka" styleClass="poruka" />
+                        <hr/>
+                        Email:
+                        <p:inputText id="email" value="#{adminController.dodajAdmin.email}" styleClass="inputPolja" style="background: lightgray"
+                                     required="true" requiredMessage="Polje email je obavezno!" placeholder="Unesi username"
+                                     >
+                            <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}"/>
+                        </p:inputText>
+                        <p:message for="email" styleClass="poruka"/>
+                        <hr/>
+                        <p:commandButton type="submit" process="@form" update="dodajAdmina" value="Dodaj" action="#{adminController.dodajAdmina()}">
+                        </p:commandButton>
+
+                    </p:panelGrid>
+                </h:form>
+            </p:tab>
+
+            <p:tab title="Izmeni">
+                <h:form id="firmePrikaz" style="width:100%">
+                    <p:dataTable value="#{adminController.firme}" var="firma" style="width:100%">
+                        <p:column>
+                            <f:facet name="header">
+                                Username
+                            </f:facet>
+                            <h:outputText value="#{firma.username}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Ime
+                            </f:facet>
+                            <h:outputText value="#{firma.ime}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Datum osnivanja
+                            </f:facet>
+                            <h:outputText value="#{firma.datumOsnivanja}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Mesto
+                            </f:facet>
+                            <h:outputText value="#{firma.mesto}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Email
+                            </f:facet>
+                            <h:outputText value="#{firma.email}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Odobreno
+                            </f:facet>
+                            <h:outputText value="#{firma.odobreno}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                            </f:facet>
+                            <p:commandButton update="@([id$=izmenaFirme])" process="@form" value="Izmeni" action="#{adminController.izmeniFirmu(firma)}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                </h:form>
+                <br/>
+                <h:form id="izmenaFirme">
+                    <p style="color:red;">
+                        #{adminController.msgFirmaZaIzmenu}
+                    </p>
+                    <br/>
+                    <p:panelGrid columns="2">
+                        Ime:
+                        <h:inputText value="#{adminController.firmaZaIzmenu.ime}"></h:inputText>
+                        Datum:
+                        <p:calendar value="#{adminController.firmaZaIzmenu.datumOsnivanja}"></p:calendar>
+                        Mesto:
+                        <h:inputText value="#{adminController.firmaZaIzmenu.mesto}"></h:inputText>
+                        Email:
+                        <h:inputText value="#{adminController.firmaZaIzmenu.email}"></h:inputText>
+                    </p:panelGrid>  
+                    <p:commandButton update="@([id$=firmePrikaz])" process="@form" value="Zapamti" action="#{adminController.zapamtiFirmu()}" rendered="#{adminController.zapamtiDugmeZaFirmu}"></p:commandButton>
+
+                </h:form>
+
+                <br/>
+
+
+                <h:form id="poljoprivredniciZaPrikaz" style="width:100%">
+
+                    <p:dataTable id="izmeniPoljoprivrednike" var="poljoprivrednik" value="#{adminController.poljoprivrednici}"
+                                 >
+                        <f:facet name="header">
+                            Poljoprivrednici:
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                Username
+                            </f:facet>
+                            #{poljoprivrednik.username}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Ime
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.ime}" rendered="#{not poljoprivrednik.izmeni}" style="width:100%"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Prezime
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.prezime}" rendered="#{not poljoprivrednik.izmeni}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Datum rodjenja
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.datumRodjenja}" rendered="#{not poljoprivrednik.izmeni}" style="width:100%"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Mesto
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.mestoRodjenja}" rendered="#{not poljoprivrednik.izmeni}" style="width:100%"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Telefon
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.telefon}" rendered="#{not poljoprivrednik.izmeni}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                E-mail
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.email}" rendered="#{not poljoprivrednik.izmeni}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Odobreno
+                            </f:facet>
+                            <h:outputText value="#{poljoprivrednik.odobreno}" rendered="#{not poljoprivrednik.izmeni}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                            </f:facet>
+                            <p:commandButton update="@([id$=izmeniPolj])" process="@form" value="Izmeni" action="#{adminController.izmeniPoljoprivrednika(poljoprivrednik)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                <br/>
+                <h:form id="izmeniPolj">
+                    <p style="color:red;">
+                        #{adminController.msgFirmaZaIzmenu}
+                    </p>
+                    <br/>
+                    <p:panelGrid columns="2">
+                        Ime:
+                        <h:inputText value="#{adminController.poljoprivrednikZaIzmenu.ime}"></h:inputText>
+                        Datum:
+                        <p:calendar value="#{adminController.poljoprivrednikZaIzmenu.datumRodjenja}"></p:calendar>
+                        Mesto:
+                        <h:inputText value="#{adminController.poljoprivrednikZaIzmenu.mestoRodjenja}"></h:inputText>
+                        Email:
+                        <h:inputText value="#{adminController.poljoprivrednikZaIzmenu.email}"></h:inputText>
+                        Broj telefona
+                        <h:inputText  value="#{adminController.poljoprivrednikZaIzmenu.telefon}" ></h:inputText>
+                    </p:panelGrid>  
+                    <p:commandButton update="@([id$=poljoprivredniciZaPrikaz])" process="@form" value="Zapamti" rendered="#{adminController.zapamtiDugmeZaPolj}" action="#{adminController.zapamtiPoljoprivrednika()}"></p:commandButton>
+                </h:form>
+            </p:tab>
+        </p:tabView>
+
+        <br/>
+        <br/>
+    </h:body>
+</html>
+
